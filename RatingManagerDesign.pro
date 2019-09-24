@@ -26,11 +26,13 @@ CONFIG += c++11
 
 SOURCES += \
         authorithationform.cpp \
+        eventclass.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
         authorithationform.h \
+        eventclass.h \
         mainwindow.h
 
 FORMS += \
