@@ -156,7 +156,7 @@
        <number>0</number>
       </property>
       <property name="rightMargin">
-       <number>24</number>
+       <number>0</number>
       </property>
       <item>
        <widget class="QLabel" name="label">
@@ -401,7 +401,37 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
+          <widget class="QComboBox" name="time_box_history">
+           <item>
+            <property name="text">
+             <string>За всё время</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последняя неделя</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последний месяц</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последние 3 месяца</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QListWidget" name="eventsList">
+           <property name="minimumSize">
+            <size>
+             <width>700</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="palette">
             <palette>
              <active>
@@ -409,8 +439,8 @@
                <brush brushstyle="SolidPattern">
                 <color alpha="255">
                  <red>0</red>
-                 <green>3</green>
-                 <blue>150</blue>
+                 <green>2</green>
+                 <blue>84</blue>
                 </color>
                </brush>
               </colorrole>
@@ -419,7 +449,7 @@
                 <color alpha="255">
                  <red>0</red>
                  <green>3</green>
-                 <blue>150</blue>
+                 <blue>98</blue>
                 </color>
                </brush>
               </colorrole>
@@ -447,8 +477,8 @@
                <brush brushstyle="SolidPattern">
                 <color alpha="255">
                  <red>0</red>
-                 <green>3</green>
-                 <blue>150</blue>
+                 <green>2</green>
+                 <blue>84</blue>
                 </color>
                </brush>
               </colorrole>
@@ -457,7 +487,7 @@
                 <color alpha="255">
                  <red>0</red>
                  <green>3</green>
-                 <blue>150</blue>
+                 <blue>98</blue>
                 </color>
                </brush>
               </colorrole>
@@ -527,6 +557,9 @@
              <weight>75</weight>
              <bold>true</bold>
             </font>
+           </property>
+           <property name="cursor" stdset="0">
+            <cursorShape>ArrowCursor</cursorShape>
            </property>
            <property name="frameShape">
             <enum>QFrame::StyledPanel</enum>
@@ -737,6 +770,30 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
+          <widget class="QComboBox" name="time_box_statistic">
+           <item>
+            <property name="text">
+             <string>За всё время</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последняя неделя</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последний месяц</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Последние 3 месяца</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
           <widget class="QScrollArea" name="scrollArea">
            <property name="widgetResizable">
             <bool>true</bool>
@@ -746,7 +803,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>471</width>
+              <width>419</width>
               <height>464</height>
              </rect>
             </property>

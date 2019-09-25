@@ -22,6 +22,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_time_box_history_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     QVector<EventClass> Events;
@@ -31,6 +34,7 @@ private:
     void printEvents();
     QString getNameOfEvent(EventClass &ec);
     void printStatistic();
+    void changeDays(QDate& date, int value);
 };
 
 #endif // MAINWINDOW_H
