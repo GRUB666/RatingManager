@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1048</width>
-    <height>589</height>
+    <width>1228</width>
+    <height>759</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -147,6 +147,12 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
+    <property name="spacing">
+     <number>16</number>
+    </property>
+    <property name="topMargin">
+     <number>9</number>
+    </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,0,0">
       <property name="sizeConstraint">
@@ -423,6 +429,89 @@
             </property>
            </item>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QCheckBox" name="show_all">
+             <property name="text">
+              <string>Показывать всё</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="education_check">
+             <property name="text">
+              <string>Учебная деятельность</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="other_check">
+             <property name="text">
+              <string>Внеурочная деятельность</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="discipline_check">
+             <property name="text">
+              <string>Дисциплина</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QListWidget" name="eventsList">
@@ -760,7 +849,7 @@
          </font>
         </property>
         <property name="title">
-         <string>Статистика</string>
+         <string>Статистика за всё время</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -769,30 +858,6 @@
          <bool>false</bool>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QComboBox" name="time_box_statistic">
-           <item>
-            <property name="text">
-             <string>За всё время</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Последняя неделя</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Последний месяц</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Последние 3 месяца</string>
-            </property>
-           </item>
-          </widget>
-         </item>
          <item>
           <widget class="QScrollArea" name="scrollArea">
            <property name="widgetResizable">
@@ -804,7 +869,7 @@
               <x>0</x>
               <y>0</y>
               <width>419</width>
-              <height>464</height>
+              <height>566</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1041,7 +1106,14 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="most_section">
+                 <widget class="Line" name="line_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="educate_rating">
                   <property name="palette">
                    <palette>
                     <active>
@@ -1069,10 +1141,10 @@
                     <disabled>
                      <colorrole role="WindowText">
                       <brush brushstyle="SolidPattern">
-                       <color alpha="127">
-                        <red>255</red>
+                       <color alpha="255">
+                        <red>0</red>
                         <green>255</green>
-                        <blue>255</blue>
+                        <blue>0</blue>
                        </color>
                       </brush>
                      </colorrole>
@@ -1082,12 +1154,108 @@
                   <property name="font">
                    <font>
                     <pointsize>11</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
                    </font>
                   </property>
                   <property name="text">
-                   <string>Дисциплина принесла больше всего баллов</string>
+                   <string>Рейтинг за учебную деятельность:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="other_rating">
+                  <property name="palette">
+                   <palette>
+                    <active>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>3</green>
+                        <blue>150</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </active>
+                    <inactive>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>3</green>
+                        <blue>150</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </inactive>
+                    <disabled>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>255</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </disabled>
+                   </palette>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Рейтинг за внеурочную деятельность:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="discipline_rating">
+                  <property name="palette">
+                   <palette>
+                    <active>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>3</green>
+                        <blue>150</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </active>
+                    <inactive>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>3</green>
+                        <blue>150</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </inactive>
+                    <disabled>
+                     <colorrole role="WindowText">
+                      <brush brushstyle="SolidPattern">
+                       <color alpha="255">
+                        <red>0</red>
+                        <green>255</green>
+                        <blue>0</blue>
+                       </color>
+                      </brush>
+                     </colorrole>
+                    </disabled>
+                   </palette>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Рейтинг за дисциплину:</string>
                   </property>
                  </widget>
                 </item>
@@ -1378,7 +1546,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="best_pupil_count">
+                 <widget class="QLabel" name="festives_winners">
                   <property name="palette">
                    <palette>
                     <active>
@@ -1424,12 +1592,12 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Количество отличников: 8</string>
+                   <string>Количество призёров конкурсов:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="good_pupil_count">
+                 <widget class="QLabel" name="festives_competitors">
                   <property name="palette">
                    <palette>
                     <active>
@@ -1475,7 +1643,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Количество хорошистов: 15</string>
+                   <string>Количество участий в конкурсах:</string>
                   </property>
                  </widget>
                 </item>
@@ -1710,7 +1878,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Участия в постановках: 7</string>
+                   <string>Участия в постановках и праздниках: 7</string>
                   </property>
                  </widget>
                 </item>
@@ -1761,7 +1929,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Походы в музеи: 3</string>
+                   <string>Походы в музеи и театры:</string>
                   </property>
                  </widget>
                 </item>
@@ -1812,7 +1980,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Победы в конкурсах:9</string>
+                   <string>Побед в школьных мероприятиях:</string>
                   </property>
                  </widget>
                 </item>
@@ -2001,7 +2169,7 @@
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_7">
                 <item>
-                 <widget class="QLabel" name="misses_count">
+                 <widget class="QLabel" name="form_count">
                   <property name="palette">
                    <palette>
                     <active>
@@ -2047,12 +2215,12 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Количество пропусков: 34</string>
+                   <string>Срендее количество учеников в форме:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="alerts_count">
+                 <widget class="QLabel" name="misses_points">
                   <property name="palette">
                    <palette>
                     <active>
@@ -2098,12 +2266,12 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Замечаний от дежурных: 2</string>
+                   <string>Баллы за отсутствие пропусков:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="out_of_form_count">
+                 <widget class="QLabel" name="reports_count">
                   <property name="palette">
                    <palette>
                     <active>
@@ -2149,7 +2317,7 @@
                    </font>
                   </property>
                   <property name="text">
-                   <string>Учеников без формы: 23</string>
+                   <string>Сообщений о школе:</string>
                   </property>
                  </widget>
                 </item>
