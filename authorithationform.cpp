@@ -43,7 +43,7 @@ void AuthorithationForm::loadAuthorithationData()
 
             ui->login_text->setText(login);
             ui->pass_text->setText(password);
-            ui->checkBox->setChecked(true); //Установка true, если пароль был уже сохранён
+            ui->checkBox->setChecked(login != "" && password != ""); //Установка true, если пароль был уже сохранён
 
             file.close();
         }

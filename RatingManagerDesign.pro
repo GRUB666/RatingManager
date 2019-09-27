@@ -25,17 +25,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        addeventform.cpp \
         authorithationform.cpp \
         eventclass.cpp \
         main.cpp \
         mainwindow.cpp
 
 HEADERS += \
+        addeventform.h \
         authorithationform.h \
         eventclass.h \
         mainwindow.h
 
 FORMS += \
+        addeventform.ui \
         authorithationform.ui \
         mainwindow.ui
 

@@ -9,6 +9,7 @@
 
 #include "authorithationform.h"
 #include "eventclass.h"
+#include "addeventform.h"
 
 namespace Ui {
 class MainWindow;
@@ -46,6 +47,8 @@ private slots:
 
     void on_label_2_linkActivated(const QString &link);
 
+
+    void on_addEventButton_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -515,3 +515,11 @@ void MainWindow::on_label_2_linkActivated(const QString &link)
     updateDataFromDB();
     ui->statusBar->showMessage("Данные обновлены");
 }
+
+void MainWindow::on_addEventButton_clicked()
+{
+    EventClass new_event;
+    bool succes = false;
+    AddEventForm *form = new AddEventForm(&new_event, &succes);
+    form->exec();
+}
