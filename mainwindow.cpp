@@ -33,7 +33,7 @@ void MainWindow::updateDataFromDB()
 //TODO: сделать загрузку событий из бд в вектор Events
 void MainWindow::loadEvents()
 {
-    Events.clear();
+   /* Events.clear();
 
     for(int i = 1; i < 29; i++)
     {
@@ -42,6 +42,7 @@ void MainWindow::loadEvents()
         EventClass nw(i, i, 1, dat);
         Events.push_front(nw);
     }
+    */
 }
 
 //Выводит все события в список истории
@@ -522,4 +523,12 @@ void MainWindow::on_addEventButton_clicked()
     bool succes = false;
     AddEventForm *form = new AddEventForm(&new_event, &succes);
     form->exec();
+
+    if(succes)
+    {
+        Events.push_back(new_event);
+        ui->statusBar->showMessage("Новое событие успешно добавлено");
+        updateDataFromDB();
+    }
+
 }

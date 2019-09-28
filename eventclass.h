@@ -9,21 +9,21 @@ class EventClass
 private:
     QDate date;
     int type;
-    int points;
+    float points;
     int k;
 
 public:
     EventClass();
-    EventClass(int type, int points, int k = 1, QDate date = QDate());
+    EventClass(int type, float points, int k = 1, QDate date = QDate());
 
     QDate getDate() { return date; }
     int getType() { return type; }
-    int getPoints() { return points; }
+    float getPoints() { return points; }
     int getK() { return k; }
 
     void setDate(QDate date) { this->date = date; }
     void setType(int type) { this->type = type; }
-    void setPoints(int points) { this->points = points; }
+    void setPoints(float points) { this->points = points; }
     void setK(int k) { this->k = k; }
 };
 
