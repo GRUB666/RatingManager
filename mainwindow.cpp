@@ -7,15 +7,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->pushButton->setShortcut(QKeySequence(Qt::Key_Delete));
+
     ui->statusBar->showMessage("Приложение загружено. Вход успешно выполнен");
 
-    AuthorithationForm *auth = new AuthorithationForm(); //Открытие окна авторизации
+    AuthorithationForm *auth = new AuthorithationForm(&id, &db); //Открытие окна авторизации
     auth->exec();
     delete auth;
 
     this->showMaximized();
 
     updateDataFromDB(); //Первичная загрузка данных из бд
+    setClassLabel();
 }
 
 MainWindow::~MainWindow()
@@ -23,26 +26,77 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::keyPressEvent(QKeyEvent* pe)
+{
+    if(pe->key() == Qt::Key_F5)
+    {
+        updateDataFromDB();
+        ui->statusBar->showMessage("Данные обновлены");
+    }
+
+}
+
 void MainWindow::updateDataFromDB()
 {
     loadEvents();
+    loadTypes();
     printEvents();
     printStatistic();
 }
 
-//TODO: сделать загрузку событий из бд в вектор Events
 void MainWindow::loadEvents()
 {
-   /* Events.clear();
+    Events.clear();
 
-    for(int i = 1; i < 29; i++)
+    QSqlQuery query = QSqlQuery(db);
+    QString qs = "SELECT * FROM event WHERE id_class = " + QString::number(id) + ";";
+
+    if(!query.exec(qs))
     {
-        QDate dat = QDate::currentDate();
-        changeDays(dat, 1 - i);
-        EventClass nw(i, i, 1, dat);
-        Events.push_front(nw);
+        QMessageBox::warning(this, "Ошибка подключения", "Код ошибки: " + query.lastError().text());
+        exit(0);
     }
-    */
+
+    EventClass tmp;
+    QSqlRecord rec = query.record();
+
+    while(query.next())
+    {
+        tmp.setType(query.value(rec.indexOf("type")).toInt());
+        tmp.setPoints(query.value(rec.indexOf("points")).toDouble());
+        tmp.setK(query.value(rec.indexOf("k")).toInt());
+        tmp.setDate(query.value(rec.indexOf("date")).toDate());
+        tmp.setId(query.value(rec.indexOf("id")).toInt());
+
+        Events.push_back(tmp);
+    }
+}
+
+void MainWindow::loadTypes()
+{
+    Types.clear();
+
+    QSqlQuery query = QSqlQuery(db);
+    QString qs = "SELECT * FROM type;";
+
+    if(!query.exec(qs))
+    {
+        QMessageBox::warning(this, "Ошибка подключения", "Код ошибки: " + query.lastError().text());
+        exit(0);
+    }
+
+    TypeClass tmp;
+    QSqlRecord rec = query.record();
+
+    while(query.next())
+    {
+        tmp.setName(query.value(rec.indexOf("name")).toString());
+        tmp.setPoints(query.value(rec.indexOf("points")).toFloat());
+        tmp.setCategory(query.value(rec.indexOf("category")).toInt());
+        tmp.setAlterName(query.value(rec.indexOf("alter_name")).toString());
+
+        Types.push_back(tmp);
+    }
 }
 
 //Выводит все события в список истории
@@ -69,96 +123,7 @@ void MainWindow::printEvents()
 //TODO: нужно расписать все типы событий
 QString MainWindow::getNameOfEvent(EventClass &ec)
 {
-    switch (ec.getType())
-    {
-    case 1:
-        return "Ученик закончил четверть без троек";
-        break;
-    case 2:
-        return "Участие в школьном туре олимпиады";
-        break;
-    case 3:
-        return "Участие в окружном туре олимпиады";
-        break;
-    case 4:
-        return "Участие в городском туре олимпиады";
-        break;
-    case 5:
-        return "Участие во Всероссийском туре олимпиады";
-        break;
-    case 6:
-        return "Призёрство в окружном туре олимпиады";
-        break;
-    case 7:
-        return "Призёрство в городском туре олимпиады";
-        break;
-    case 8:
-        return "Призёрство во Всероссийском туре олимпиады";
-        break;
-    case 9:
-        return "Участие в окружном конкурсе";
-        break;
-    case 10:
-        return "Участие в городском конкурсе";
-        break;
-    case 11:
-        return "Участие во Всероссийском конкурсе";
-        break;
-    case 12:
-        return "Призёр конкурса";
-        break;
-    case 13:
-        return "Разница в среднем балле";
-        break;
-    case 14:
-        return "Оформление классного уголка";
-        break;
-    case 15:
-        return "Участие в концерте, постановке или открытом уроке";
-        break;
-    case 16:
-        return "Посещение театра или музея";
-        break;
-    case 17:
-        return "Помощь школьному совету и\\или педагогу";
-        break;
-    case 18:
-        return "Организация мероприятрий";
-        break;
-    case 19:
-        return "Участие в дне самоуправления";
-        break;
-    case 20:
-        return "Снятие фильма\\ролика о классе";
-        break;
-    case 21:
-        return "Победа в школьном мероприятии";
-        break;
-    case 22:
-        return "Организация кружка по интересам в школе";
-        break;
-    case 23:
-        return "Победа в неожиданном соревновании";
-        break;
-    case 24:
-        return "Соблюдение формы";
-        break;
-    case 25:
-        return "Нет замечаний от дежурного";
-        break;
-    case 26:
-        return "Нет правонарушений";
-        break;
-    case 27:
-        return "Посещаемость больше 90%";
-        break;
-    case 28:
-        return "Полезное сообщение о школе";
-        break;
-
-    default:
-        return "Некорректный тип!";
-    }
+    return Types[ec.getType() - 1].getName();
 }
 
 //TODO: сделать вывод статистики (собирается из вектора Events)
@@ -188,28 +153,28 @@ void MainWindow::printStatistic()
 
     //Расчёт и инициализация всех переменных
     {
-    int summ_rating = 0;
+    float summ_rating = 0;
     for(auto &var : ToCalculateVector)
     {
         summ_rating += var.getPoints();
     }
 
-    int education_rating = 0;
+    float education_rating = 0;
     for(auto &var : ToCalculateVector)
     {
-        if(var.getType() < 12) { education_rating += var.getPoints(); }
+        if(Types[var.getType() - 1].getCategory() == 1) { education_rating += var.getPoints(); }
     }
 
-    int other_rating = 0;
+    float other_rating = 0;
     for(auto &var : ToCalculateVector)
     {
-        if(var.getType() >= 12 && var.getType() < 22) { other_rating += var.getPoints(); }
+        if(Types[var.getType() - 1].getCategory() == 2) { other_rating += var.getPoints(); }
     }
 
-    int discipline_rating = 0;
+    float discipline_rating = 0;
     for(auto &var : ToCalculateVector)
     {
-        if(var.getType() >= 22) { discipline_rating += var.getPoints(); }
+        if(Types[var.getType() - 1].getCategory() == 3) { discipline_rating += var.getPoints(); }
     }
 
 
@@ -259,7 +224,7 @@ void MainWindow::printStatistic()
     int count_of_wins_in_school_comp = 0;
     for(auto &var : ToCalculateVector)
     {
-        if(var.getType() == 21)
+        if(var.getType() == 20)
             count_of_wins_in_school_comp += var.getK();
     }
 
@@ -267,7 +232,7 @@ void MainWindow::printStatistic()
     int count = 0;
     for(auto &var : ToCalculateVector)
     {
-        if(var.getType() == 24)
+        if(var.getType() == 23)
         {
             count++;
             pupil_in_form += var.getK();
@@ -282,7 +247,7 @@ void MainWindow::printStatistic()
     int nomisses_count = 0;
     for(auto &var : ToCalculateVector)
     {
-        if(var.getType() == 27)
+        if(var.getType() == 26)
             nomisses_count += var.getPoints();
     }
 
@@ -366,7 +331,7 @@ void MainWindow::applyFilters(QVector<EventClass> &vec)
     {
         if(vec[i].getDate() >= lastDate)
         {
-            if(vec[i].getType() < 12)
+            if(vec[i].getType() < 14)
             {
                 if(!ui->education_check->isChecked())
                 {
@@ -375,7 +340,7 @@ void MainWindow::applyFilters(QVector<EventClass> &vec)
                 }
             }
 
-            else if(vec[i].getType() < 22)
+            else if(vec[i].getType() < 24)
             {
                 if(!ui->other_check->isChecked())
                 {
@@ -424,6 +389,46 @@ QDate MainWindow::getLastDate()
         lastDate = QDate(0, 0, 1);
         return lastDate;
         break;
+    }
+}
+
+void MainWindow::setClassLabel()
+{
+    QSqlQuery query = QSqlQuery(db);
+
+    if(!query.exec("SELECT * FROM class WHERE id = " + QString::number(id) + ";"))
+    {
+        QMessageBox::warning(this, "Ошибка имени класса", "Имя класса не было загружено");
+        exit(0);
+    }
+
+    else
+    {
+        QSqlRecord rec = query.record();
+        QString number, letter;
+
+        while (query.next())
+        {
+            number = query.value(rec.indexOf("number")).toString();
+            letter = query.value(rec.indexOf("letter")).toString();
+        }
+
+        ui->class_label->setText("<html><head/><body><p align=\"right\">" + number + " &lt;&lt;" + letter + "&gt;&gt;</p><p align=\"right\"><a href=\"quit_profile\"><span style=\" font-size:8pt; text-decoration: underline; color:#007af4;\">[Выйти из профиля...]</span></a></p></body></html>");
+    }
+}
+
+void MainWindow::deleteEvent(int index)
+{
+    QSqlQuery query = QSqlQuery(db);
+
+    if(!query.exec("DELETE FROM event WHERE id = " + QString::number(Events[index].getId()) + ";"))
+    {
+        QMessageBox::warning(this, "Ошибка", "Ошибка при удалении!");
+    }
+
+    else
+    {
+        updateDataFromDB();
     }
 }
 
@@ -501,12 +506,13 @@ void MainWindow::on_class_label_linkActivated(const QString &link)
 {
     this->setVisible(false);
 
-    AuthorithationForm *auth = new AuthorithationForm(); //Открытие окна авторизации
+    AuthorithationForm *auth = new AuthorithationForm(&id, &db); //Открытие окна авторизации
     auth->exec();
     delete auth;
 
     this->setVisible(true);
     ui->statusBar->showMessage("Вход успешно выполнен");
+    setClassLabel();
 
     updateDataFromDB();
 }
@@ -515,20 +521,62 @@ void MainWindow::on_label_2_linkActivated(const QString &link)
 {
     updateDataFromDB();
     ui->statusBar->showMessage("Данные обновлены");
+    setClassLabel();
 }
 
 void MainWindow::on_addEventButton_clicked()
 {
-    EventClass new_event;
     bool succes = false;
-    AddEventForm *form = new AddEventForm(&new_event, &succes);
+    AddEventForm *form = new AddEventForm(&db, &succes, id, Types);
     form->exec();
+    delete form;
 
     if(succes)
     {
-        Events.push_back(new_event);
-        ui->statusBar->showMessage("Новое событие успешно добавлено");
         updateDataFromDB();
     }
 
+}
+
+void MainWindow::on_label_linkActivated(const QString &link)
+{
+    Documentation *doc = new Documentation();
+    doc->exec();
+    delete doc;
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    QMessageBox msgb;
+
+    if(Types[Events[ui->eventsList->currentRow()].getType() - 1].getCategory() == 3)
+    {
+        msgb.setWindowTitle("Ошибка");
+        msgb.setText("Вы не можете удалить событие из категории \"Дисциплина\"");
+        msgb.setStandardButtons(QMessageBox::Ok);
+        msgb.setIcon(QMessageBox::Icon(QMessageBox::Icon::Warning));
+        msgb.setWindowIcon(windowIcon());
+        msgb.exec();
+    }
+
+    else
+    {
+        msgb.setWindowTitle("Удаление события");
+        msgb.setText("Вы действительно хотите удалить событие: [" + getNameOfEvent(Events[ui->eventsList->currentRow()]) + "] ?");
+        msgb.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgb.setIcon(QMessageBox::Icon(QMessageBox::Icon::Question));
+        msgb.setWindowIcon(windowIcon());
+        int result = msgb.exec();
+
+        if (result == QMessageBox::Yes)
+        {
+            deleteEvent(ui->eventsList->currentRow());
+        }
+    }
+
+}
+
+void MainWindow::on_eventsList_currentRowChanged(int currentRow)
+{
+    ui->pushButton->setEnabled(currentRow >= 0 && currentRow < Events.size());
 }

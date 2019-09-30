@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,19 +27,24 @@ CONFIG += c++11
 SOURCES += \
         addeventform.cpp \
         authorithationform.cpp \
+        documentation.cpp \
         eventclass.cpp \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        typeclass.cpp
 
 HEADERS += \
         addeventform.h \
         authorithationform.h \
+        documentation.h \
         eventclass.h \
-        mainwindow.h
+        mainwindow.h \
+        typeclass.h
 
 FORMS += \
         addeventform.ui \
         authorithationform.ui \
+        documentation.ui \
         mainwindow.ui
 
 # Default rules for deployment.

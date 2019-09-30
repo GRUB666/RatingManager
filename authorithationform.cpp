@@ -2,6 +2,7 @@
 #include "ui_authorithationform.h"
 #include <QDebug>
 
+
 void AuthorithationForm::closeEvent(QCloseEvent *)
 {
     //Закрывать приложение, если пароль не введён успешно
@@ -9,11 +10,31 @@ void AuthorithationForm::closeEvent(QCloseEvent *)
         exit(0);
 }
 
-AuthorithationForm::AuthorithationForm(QWidget *parent) :
+AuthorithationForm::AuthorithationForm(int* id, QSqlDatabase* db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AuthorithationForm)
 {
     ui->setupUi(this);
+
+    this->id = id;
+    this->db = db;
+
+    *db = QSqlDatabase::addDatabase("QMYSQL");
+    db->setHostName("127.0.0.1");
+    db->setDatabaseName("rating");
+    db->setUserName("root");
+    db->setPassword("whiterabbit3_root");
+
+    if(!db->open())
+    {
+        QMessageBox::warning(this, "Ошибка подключения к базе данных","Ошибка: " + db->lastError().text());
+        exit(0);
+    }
+
+    else
+    {
+
+    }
 
     succes = false;
 
@@ -52,9 +73,21 @@ void AuthorithationForm::loadAuthorithationData()
 
 bool AuthorithationForm::checkIfCorrect()
 {
-    //bool isCorrect = true;
+    QString qs = "SELECT * FROM class WHERE password = '" + ui->pass_text->text() + "' AND login = \'" + ui->login_text->text() + "';";
 
-    return login == "PIDOR" && password == "1488";
+    QSqlQuery query = QSqlQuery(*db);
+    if(!query.exec(qs))
+    {
+        QMessageBox::warning(this, "Ошибка запроса", "Код: " + query.lastError().text());
+        return false;
+    }
+
+    QSqlRecord rec = query.record();
+
+    if(query.next())
+        *id = query.value(rec.indexOf("id")).toInt();
+
+    return query.size() != 0;
 }
 
 void AuthorithationForm::setLoginAndPass()

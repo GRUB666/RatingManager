@@ -6,9 +6,16 @@
 #include <QTextStream>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlTableModel>
+#include <QSqlError>
+#include <QMessageBox>
+#include <QSqlRecord>
 
 static QString AUTHORITHATION_FILE_NAME;
-static QString login, password, id; //Глобальные переменные логина, пароля и пути к ним. Плюс id, чтобы два раза не искать одну и ту же запись
+static QString login, password; //Глобальные переменные логина, пароля и пути к ним. Плюс id, чтобы два раза не искать одну и ту же запись
+
 
 namespace Ui {
 class AuthorithationForm;
@@ -20,12 +27,14 @@ class AuthorithationForm : public QDialog
 
 private:
     bool succes; //Переменная успешности ввода пароля
+    int* id;
+    QSqlDatabase* db;
 
 protected:
     virtual void closeEvent(QCloseEvent *event); //Обработка события закрытия окна
 
 public:
-    explicit AuthorithationForm(QWidget *parent = nullptr);
+    explicit AuthorithationForm(int* id, QSqlDatabase* db, QWidget *parent = nullptr);
     ~AuthorithationForm();
 
 private slots:

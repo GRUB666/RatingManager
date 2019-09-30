@@ -3,6 +3,13 @@
 
 #include <QDialog>
 #include "eventclass.h"
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
+#include <QVector>
+
+#include "typeclass.h"
 
 namespace Ui {
 class AddEventForm;
@@ -14,10 +21,12 @@ class AddEventForm : public QDialog
 
 private:
     bool *succes;
-    EventClass* event;
+    QSqlDatabase* db;
+    int id_class;
+    QVector<TypeClass> types;
 
 public:
-    explicit AddEventForm(EventClass* event, bool* succes, QWidget *parent = nullptr);
+    explicit AddEventForm(QSqlDatabase* db, bool* succes, int id_class, QVector<TypeClass>& types, QWidget *parent = nullptr);
     ~AddEventForm();
 
     float calculatePoints();
@@ -32,6 +41,8 @@ private slots:
 
 private:
     Ui::AddEventForm *ui;
+
+    void setTypesInBox();
 };
 
 #endif // ADDEVENTFORM_H

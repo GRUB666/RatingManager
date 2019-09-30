@@ -11,6 +11,8 @@ private:
     int type;
     float points;
     int k;
+    int event_id;
+
 
 public:
     EventClass();
@@ -20,11 +22,13 @@ public:
     int getType() { return type; }
     float getPoints() { return points; }
     int getK() { return k; }
+    int getId() { return event_id; }
 
     void setDate(QDate date) { this->date = date; }
     void setType(int type) { this->type = type; }
     void setPoints(float points) { this->points = points; }
     void setK(int k) { this->k = k; }
+    void setId(int id) { this->event_id = id; }
 };
 
 #endif // EVENTCLASS_H

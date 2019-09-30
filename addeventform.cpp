@@ -1,13 +1,21 @@
 #include "addeventform.h"
 #include "ui_addeventform.h"
+#include <QMessageBox>
 
-AddEventForm::AddEventForm(EventClass* event, bool* succes, QWidget *parent) :
+AddEventForm::AddEventForm(QSqlDatabase* db, bool* succes, int id_class, QVector<TypeClass>& types, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddEventForm)
 {
     ui->setupUi(this);
-    this->event = event;
     this->succes = succes;
+    this->db = db;
+    this->id_class = id_class;
+
+   for(auto &var : types)
+   {
+       if(var.getCategory() != 3)
+           this->types.push_back(var);
+   }
 
     ui->calendarWidget->setMaximumDate(QDate::currentDate());
     ui->calendarWidget->setMinimumDate(QDate(2014, 1, 1));
@@ -16,6 +24,7 @@ AddEventForm::AddEventForm(EventClass* event, bool* succes, QWidget *parent) :
 
     ui->calendarWidget->setSelectedDate(QDate::currentDate());
     ui->dateEdit->setDate(QDate::currentDate());
+    setTypesInBox();
 
     ui->points_count->setText("Будет получено баллов: " + QString::number(calculatePoints()));
 }
@@ -27,79 +36,8 @@ AddEventForm::~AddEventForm()
 
 float AddEventForm::calculatePoints()
 {
-    float points = ui->k_spin->value();
-    float rate_size = 1;
-
-    switch(ui->type_box->currentIndex() + 1)
-    {
-    case 3:
-        rate_size = 2;
-        break;
-    case 4:
-        rate_size = 3;
-        break;
-    case 5:
-        rate_size = 4;
-        break;
-    case 6:
-        rate_size = 5;
-        break;
-    case 7:
-        rate_size = 10;
-        break;
-    case 8:
-        rate_size = 15;
-        break;
-    case 9:
-        rate_size = 5;
-        break;
-    case 10:
-        rate_size = 10;
-        break;
-    case 11:
-        rate_size = 15;
-        break;
-    case 12:
-        rate_size = 15;
-        break;
-    case 13:
-        rate_size = 3;
-        break;
-    case 14:
-        rate_size = 5;
-        break;
-    case 15:
-        rate_size = 0.25;
-        break;
-    case 16:
-        rate_size = 3;
-        break;
-    case 17:
-        rate_size = 0.25;
-        break;
-    case 18:
-        rate_size = 2;
-        break;
-    case 19:
-        rate_size = 1;
-        break;
-    case 20:
-        rate_size = 5;
-        break;
-    case 21:
-        rate_size = 5;
-        break;
-    case 22:
-        rate_size = 5;
-        break;
-    case 23:
-        rate_size = 1;
-        break;
-    }
-
-    points *= rate_size;
-
-    return points;
+    qDebug() << ui->type_box->currentIndex();
+    return ui->k_spin->value() * types[ui->type_box->currentIndex()].getPoints();
 }
 
 void AddEventForm::on_k_spin_valueChanged(const QString &arg1)
@@ -196,6 +134,39 @@ void AddEventForm::setLabelKText()
 void AddEventForm::on_addButton_clicked()
 {
     *succes = true;
-    *event = EventClass(ui->type_box->currentIndex() + 1, calculatePoints(), ui->k_spin->value(), ui->calendarWidget->selectedDate());
-    close();
+    //*event = EventClass(ui->type_box->currentIndex() + 1, calculatePoints(), ui->k_spin->value(), ui->calendarWidget->selectedDate());
+
+    QSqlQuery query = QSqlQuery(*db);
+
+    query.prepare("INSERT INTO event (id_class, type, points, k, date) VALUES(:id_class, :type, :points, :k, :date);");
+
+    query.bindValue(":id_class", id_class);
+    query.bindValue(":type", ui->type_box->currentIndex()+1);
+    query.bindValue(":points", calculatePoints());
+    query.bindValue(":k", ui->k_spin->value());
+    query.bindValue(":date", ui->calendarWidget->selectedDate());
+
+    if(!query.exec())
+    {
+        QMessageBox::warning(this, "Ошибка добавления!", "При добавлении произошла ошибка");
+    }
+
+    else
+    {
+        close();
+    }
+
+
+}
+
+void AddEventForm::setTypesInBox()
+{
+    for(auto &var : types)
+    {
+        ui->type_box->addItem(var.getName());
+    }
+
+    qDebug() << ui->type_box->currentIndex();
+    ui->type_box->setCurrentIndex(0);
+    qDebug() << ui->type_box->currentIndex();
 }
